@@ -14,10 +14,6 @@ public class InstruccionRET extends Instruccion {
         super(instruccion);
     }
 
-    @Override
-    public void build(int instruccion) {
-        
-    }
 
     @Override
     public String getString() {

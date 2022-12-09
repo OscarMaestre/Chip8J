@@ -1,7 +1,7 @@
 CLS   ;
 
 
-call 891;
+CALL 891;
 
 
 :BORRAR
@@ -10,3 +10,12 @@ call 891;
 CLS  ;
 CALL    :BORRAR;
 JP  :BORRAR;    
+
+
+SYS 184;
+SYS :BORRAR    ;
+
+
+RET		;
+
+SE V0, 42;

@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/EmptyTestNGTest.java to edit this template
  */
 
-import io.github.oscarmaestre.jchip8.Ensamblador;
+import io.github.oscarmaestre.jchip8.ensamblador.Ensamblador;
 import io.github.oscarmaestre.jchip8.instrucciones.Instruccion;
 import java.util.ArrayList;
 import org.testng.Assert;

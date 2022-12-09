@@ -13,10 +13,7 @@ public class InstruccionJPAddr extends Instruccion {
         super(instruccion);
     }
 
-    @Override
-    public void build(int instruccion) {
-        return ;
-    }
+   
 
     @Override
     public String getString() {

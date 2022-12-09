@@ -11,24 +11,23 @@ package io.github.oscarmaestre.jchip8.instrucciones;
 public class InstruccionSEVXByte extends Instruccion {
 
     int numRegistro;
-
+    
     public InstruccionSEVXByte(int instruccion) {
         super(instruccion);
         this.numRegistro=this.nibbles[1];
     }
-    @Override
-    public void build(int instruccion) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
+ 
 
     @Override
     public String getString() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String informe="SE V"+this.registros[this.numRegistro]+", "+Integer.toString(this.KK);
+        return informe;
     }
 
     @Override
     public String getDescripcion() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String informe="Saltar sig instr. si V"+this.registros[this.numRegistro]+"=="+Integer.toString(this.KK);
+        return informe;
     }
     
 }

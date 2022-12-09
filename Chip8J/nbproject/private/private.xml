@@ -3,11 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/usuario/repos/Chip8J/Chip8J/test/TestEnsamblador.java</file>
-            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionJPAddr.java</file>
-            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/Ensamblador.java</file>
-            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/BancoRegistros.java</file>
-            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/Instruccion.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/ensamblador/DescripcionInstruccionRegistroConByte.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionSEVXByte.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/Instruccion.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionCLS.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionJPAddr.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/test/TestEnsamblador.java</file>
+            <file>file:/Extra/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/ensamblador/Ensamblador.java</file>
         </group>
     </open-files>
 </project-private>

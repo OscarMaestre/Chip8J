@@ -9,15 +9,11 @@ package io.github.oscarmaestre.jchip8.instrucciones;
  * @author usuario
  */
 public class InstruccionSYS extends Instruccion {
-    int NNN;
 
     public InstruccionSYS(int instruccion) {
         super(instruccion);
     }
-    @Override
-    public void build(int instruccion) {
-        return ;
-    }
+
 
     @Override
     public String getString() {

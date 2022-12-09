@@ -14,9 +14,19 @@ public abstract class Instruccion {
     así que lo precalculamos */
     protected int NNN;
     protected int KK;
+    static String[] registros={"0", "1", "2", "3", "4", "5", "6", "7", "8",
+        "9", "A", "B", "C", "D", "E", "F"};
     public Instruccion(int instruccion){
         this.nibbles=this.getNibble(instruccion);
-        this.build(instruccion);
+    }
+    public static int getPosRegistro(String numeroConV){
+        for (int i=0; i<registros.length; i++){
+            String reg="V"+registros[i];
+            if (reg.equals(numeroConV)){
+                return i;
+            }
+        }
+        return -1;
     }
     public int getNNN(){
         return this.NNN;
@@ -51,7 +61,7 @@ public abstract class Instruccion {
         this.NNN=(nibbles[1]*256) + (nibbles[2]*16) + (nibbles[3]);
         return nibbles;
     }
-    public abstract void build(int instruccion);
+    
     
     public abstract String getString();
     
