@@ -3,18 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/test/TestCLS.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/BancoRegistros.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionCALL.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/Registro.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/instrucciones/Instruccion.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/Ensamblador.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/test/TestCALL.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/Memoria.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/Interfaz.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionRET.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/test/TestEnsamblador.java</file>
-            <file>file:/home/usuario/repos/NuevoJCHIP8/NewJCHIP8/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionSEVXByte.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/test/TestEnsamblador.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/InstruccionJPAddr.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/Ensamblador.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/BancoRegistros.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/Instruccion.java</file>
         </group>
     </open-files>
 </project-private>

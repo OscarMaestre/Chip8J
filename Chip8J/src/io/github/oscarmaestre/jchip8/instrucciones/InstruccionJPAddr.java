@@ -9,7 +9,6 @@ package io.github.oscarmaestre.jchip8.instrucciones;
  * @author usuario
  */
 public class InstruccionJPAddr extends Instruccion {
-    int NNN;
     public InstruccionJPAddr(int instruccion) {
         super(instruccion);
     }

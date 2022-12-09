@@ -14,6 +14,7 @@ public class BancoRegistros {
     Registro   pc                 = new Registro();
     Registro   dt                 = new Registro();
     Registro   st                 = new Registro();
+    
     public BancoRegistros(){
         for (int i=0; i<registrosGenerales.length; i++){
             registrosGenerales[i]=new Registro();
@@ -30,6 +31,14 @@ public class BancoRegistros {
         
         st=new Registro();
         st.setNombre("ST");
+    }
+    public void decrementarPorTimer(){
+        if (dt.valor>0){
+            dt.valor=(byte) (dt.valor - 1);
+        }
+        if (st.valor>0){
+            st.valor=(byte) (st.valor - 1);
+        }
     }
     
 }

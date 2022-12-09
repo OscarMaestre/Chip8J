@@ -12,8 +12,8 @@ public abstract class Instruccion {
     protected byte[] nibbles;
     /*En realidad no siempre se usa, pero ocurre a menudo
     así que lo precalculamos */
-    private int NNN;
-    private int KK;
+    protected int NNN;
+    protected int KK;
     public Instruccion(int instruccion){
         this.nibbles=this.getNibble(instruccion);
         this.build(instruccion);

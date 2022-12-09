@@ -1,0 +1,5 @@
+CLS;
+call 891;
+:BORRAR
+CLS;
+CALL :BORRAR;

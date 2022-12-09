@@ -7,9 +7,17 @@ package io.github.oscarmaestre.jchip8;
 import io.github.oscarmaestre.jchip8.instrucciones.Instruccion;
 import io.github.oscarmaestre.jchip8.instrucciones.InstruccionCALL;
 import io.github.oscarmaestre.jchip8.instrucciones.InstruccionCLS;
+import io.github.oscarmaestre.jchip8.instrucciones.InstruccionJPAddr;
+import java.net.URI;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,11 +50,20 @@ public class Ensamblador {
             patronGlobal=patronGlobal+patron;
         }
         patronGlobal=patronGlobal+this.espaciosQuiza+puntoyComa+this.espaciosQuiza;
-        System.out.println("El patron global es:"+patronGlobal);
+        //System.out.println("El patron global es:"+patronGlobal);
         Pattern devolver=Pattern.compile(patronGlobal);
         return devolver;
     }
     
+    public boolean esEtiqueta(String linea, int posActual){
+        Pattern etiqueta=Pattern.compile(this.etiqueta);
+        Matcher matcher=etiqueta.matcher(linea);
+        if (matcher.matches()){
+            this.addSimbolo(linea, posActual);
+            return true;
+        }
+        return false;
+    }
     public Instruccion esCALL(String linea){
         ArrayList<String> patrones=new ArrayList<>();
         patrones.add("(CALL)");
@@ -75,13 +92,33 @@ public class Ensamblador {
         Pattern patron = this.getPatron(patrones);
         Matcher matcher = patron.matcher(linea);
         if (matcher.matches()){
-            System.out.println("Es un CALL");
+            //System.out.println("Es un CALL");
             String direccion = matcher.group(3);
             
             Integer valor = this.tablaSimbolos.get(direccion);
-            System.out.println("Es un CALL a "+valor);
+            //System.out.println("Es un CALL a "+valor);
             int codop=(4096*2)+valor;
             InstruccionCALL i=new InstruccionCALL(codop);
+            return i;
+        } //Fin del if
+        return null;
+    }
+    
+    public Instruccion esJPConEtiqueta(String linea){
+        ArrayList<String> patrones=new ArrayList<>();
+        patrones.add("(JP)");
+        patrones.add(espaciosSiempre);
+        patrones.add(this.etiqueta);
+        Pattern patron = this.getPatron(patrones);
+        Matcher matcher = patron.matcher(linea);
+        if (matcher.matches()){
+            //System.out.println("Es un CALL");
+            String direccion = matcher.group(3);
+            
+            Integer valor = this.tablaSimbolos.get(direccion);
+            System.out.println("Es un JP a "+valor);
+            int codop=(4096*1)+valor;
+            InstruccionJPAddr i=new InstruccionJPAddr(codop);
             return i;
         } //Fin del if
         return null;
@@ -97,4 +134,80 @@ public class Ensamblador {
         }
         return null;
     }
+    public ArrayList<String> readFileAsList(String fileName) {
+        
+        ArrayList<String> lines=new ArrayList<String>();
+        try {
+            
+            lines = (ArrayList<String>) Files.readAllLines(Paths.get(fileName),
+                    Charset.defaultCharset());
+            return lines;
+            
+        } catch (Exception e) {
+            System.out.println("No encontre el fichero");
+        }
+        return lines;
+    }
+    
+    public Instruccion getInstruccionDeLinea(String linea){
+        ArrayList<Function<String, Instruccion>> procesadoInstrucciones;
+        procesadoInstrucciones=new ArrayList<>();
+        
+        procesadoInstrucciones.add(this::esCLS);
+        procesadoInstrucciones.add(this::esCALL);
+        procesadoInstrucciones.add(this::esCALLConEtiqueta);
+        procesadoInstrucciones.add(this::esCALL);
+        procesadoInstrucciones.add(this::esJPConEtiqueta);
+        
+        
+        for (Function<String, Instruccion> iterador : procesadoInstrucciones){
+            Instruccion instruccion=iterador.apply(linea);
+            if (instruccion!=null){
+                System.out.println("--------------------------------------------");
+                System.out.println("Linea de ensamblado:"+linea);
+                System.out.println("Linea de ensamblado:"+instruccion.getHexString());
+                System.out.println("Descripcion        :"+instruccion.getDescripcion());
+                System.out.println("--------------------------------------------");
+                return instruccion;
+            }
+        }
+        return null;
+    }
+    
+    public ArrayList<Instruccion> ensamblar(String nombreFichero){
+        ArrayList<String> lineas = this.readFileAsList(nombreFichero);
+        ArrayList<Instruccion> instrucciones=new ArrayList<>();
+        int posEnsamblado=512;
+        Instruccion instruccion;
+        Function<String, Instruccion> funcion;
+        
+        for (String linea : lineas){
+            linea=linea.strip();
+            if (linea.equals("")){
+                continue;
+            }
+            
+            if (this.esEtiqueta(linea, posEnsamblado)){
+                continue;
+            }
+            
+
+            instruccion=this.getInstruccionDeLinea(linea);
+            if (instruccion!=null){
+                posEnsamblado=posEnsamblado+2;
+                instrucciones.add(instruccion);
+            }
+        } //Fin del for
+        return instrucciones;
+    }
+    public static void main(String[] args) {
+        Ensamblador ensamblador=new Ensamblador();
+        ArrayList<Instruccion> ensamblar = ensamblador.ensamblar(args[0]);
+        System.out.println("---Ensamblado---");
+        for (Instruccion i:ensamblar){
+            System.out.println(i.getHexString());
+        }
+        System.out.println("---Fin de Ensamblado---");
+    }//Fin del main
+    
 }

@@ -5,6 +5,7 @@
 
 import io.github.oscarmaestre.jchip8.Ensamblador;
 import io.github.oscarmaestre.jchip8.instrucciones.Instruccion;
+import java.util.ArrayList;
 import org.testng.Assert;
 import static org.testng.Assert.*;
 import org.testng.annotations.BeforeMethod;
@@ -16,6 +17,7 @@ import org.testng.annotations.Test;
  */
 public class TestEnsamblador {
     Ensamblador ensamblador;
+    final String DIRECTORIO_ENSAMBLADO="ficheros_ensamblado";
     public TestEnsamblador() {
         this.ensamblador=new Ensamblador();
     }
@@ -42,5 +44,26 @@ public class TestEnsamblador {
         Instruccion esCLS=this.ensamblador.esCLS("CLS    ;");
         String hexString = esCLS.getHexString();
         Assert.assertEquals("00E0", hexString);
+    }
+    
+    @Test 
+    public void ensamblarFichero1(){
+        this.ensamblador.ensamblar(this.DIRECTORIO_ENSAMBLADO+"/ensamblador01.txt");
+    }
+    @Test 
+    public void ensamblarFicheroConEtiquetas(){
+        this.ensamblador.ensamblar(this.DIRECTORIO_ENSAMBLADO+"/ensamblado_con_etiqueta01.txt");
+    }
+    @Test 
+    public void ensamblarFicheroConEtiquetasYBlancos(){
+        ArrayList<Instruccion> ensamblar = this.ensamblador.ensamblar(this.DIRECTORIO_ENSAMBLADO+"/ensamblado_con_etiqueta02.txt");
+        System.out.println("---Ensamblado---");
+        String ensamblado="";
+        for (Instruccion i:ensamblar){
+            ensamblado+="\n"+i.getHexString();
+        }
+        System.out.println("Resultado:");
+        System.out.println(ensamblado);
+        System.out.println("---Fin de Ensamblado---");
     }
 }
