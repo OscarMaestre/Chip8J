@@ -55,6 +55,7 @@ public class Chip8Display extends JPanel {
             newScale=4;
         }
         this.scale=newScale;
+        
         this.setSize(new Dimension(this.STD_WIDTH*scale, this.STD_HEIGHT*scale));
         this.repaint();
     }
@@ -71,7 +72,7 @@ public class Chip8Display extends JPanel {
     public void CLS(){
         for (int row=0; row < this.STD_HEIGHT; row++){
             for (int column = 0 ; column < this.STD_WIDTH; column++){
-                this.pixelMatrix[row][column]=false;
+                this.pixelMatrix[column][row]=false;
             } //End inner for
         }//End outer for
         this.repaint();

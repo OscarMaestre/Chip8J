@@ -4,7 +4,10 @@
  */
 package io.github.oscarmaestre.jchip8.gui;
 
+import io.github.oscarmaestre.jchip8.CPUChip8;
+import io.github.oscarmaestre.jchip8.ensamblador.Ensamblador;
 import java.awt.Dimension;
+import java.util.ArrayList;
 import javax.swing.JButton;
 
 /**
@@ -13,6 +16,8 @@ import javax.swing.JButton;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    Ensamblador e;
+    CPUChip8   cpu;
     /**
      * Creates new form MainFrame
      */
@@ -21,6 +26,16 @@ public class MainFrame extends javax.swing.JFrame {
         initComponents();
         this.anadirPantalla();
         
+        e=new Ensamblador();
+        cpu=new CPUChip8(this.display);
+        ArrayList<String> lineas=new ArrayList<>();
+        lineas.add(":INICIO");
+        lineas.add("CLS;");
+        lineas.add("CALL :INICIO;");
+        byte[] ensamblarLineasComoBytes = e.ensamblarLineasComoBytes(lineas);
+        cpu.cargarBytesEnMemoria(ensamblarLineasComoBytes, 512);
+        cpu.setPC(512);
+        this.actualizarInformacionDepuracion();
         
     }
     private void anadirPantalla(){
@@ -39,11 +54,13 @@ public class MainFrame extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnStep = new javax.swing.JButton();
+        btnRun = new javax.swing.JButton();
         screenPanel = new javax.swing.JPanel();
         spnScale = new javax.swing.JSpinner();
         lblScale = new javax.swing.JLabel();
+        btnStop = new javax.swing.JButton();
+        debugPanel1 = new io.github.oscarmaestre.jchip8.gui.DebugPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
@@ -52,21 +69,28 @@ public class MainFrame extends javax.swing.JFrame {
         setName("mainFrame"); // NOI18N
         getContentPane().setLayout(new java.awt.GridBagLayout());
 
-        jButton1.setText("jButton1");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jButton1, gridBagConstraints);
-
-        jButton2.setText("jButton2");
+        btnStep.setText("Dar un paso");
+        btnStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStepActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        getContentPane().add(jButton2, gridBagConstraints);
+        getContentPane().add(btnStep, gridBagConstraints);
+
+        btnRun.setText("Ejecutar");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 5;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
+        getContentPane().add(btnRun, gridBagConstraints);
 
         screenPanel.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         screenPanel.setMinimumSize(new java.awt.Dimension(64, 32));
@@ -89,7 +113,7 @@ public class MainFrame extends javax.swing.JFrame {
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 2;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(spnScale, gridBagConstraints);
@@ -97,10 +121,19 @@ public class MainFrame extends javax.swing.JFrame {
         lblScale.setText("Scale");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.weightx = 1.0;
         getContentPane().add(lblScale, gridBagConstraints);
+
+        btnStop.setText("Parar");
+        getContentPane().add(btnStop, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 9;
+        gridBagConstraints.gridwidth = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        getContentPane().add(debugPanel1, gridBagConstraints);
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -118,6 +151,12 @@ public class MainFrame extends javax.swing.JFrame {
         System.out.println("New scale:"+newScale);
         this.display.setScale(newScale);
     }//GEN-LAST:event_spnScaleStateChanged
+
+    private void btnStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStepActionPerformed
+        System.out.println("Damos un paso");
+        cpu.ejecutarInstruccion();
+        this.actualizarInformacionDepuracion();
+    }//GEN-LAST:event_btnStepActionPerformed
 
     /**
      * @param args the command line arguments
@@ -154,9 +193,17 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
 
+    public void actualizarInformacionDepuracion(){
+        byte[] registros = this.cpu.getRegistros();
+        int registroI = this.cpu.getRegistroI();
+        this.debugPanel1.setPC(registroI);
+        this.debugPanel1.setRegistersLabels(registros);
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnRun;
+    private javax.swing.JButton btnStep;
+    private javax.swing.JButton btnStop;
+    private io.github.oscarmaestre.jchip8.gui.DebugPanel debugPanel1;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;

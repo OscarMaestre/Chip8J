@@ -62,7 +62,12 @@ public abstract class Instruccion {
         return nibbles;
     }
     
-    
+    public byte[] getBytes(){
+        byte[] bytes=new byte[2];
+        bytes[0]=(byte) ((this.nibbles[0]*16+this.nibbles[1]) & 0xff);
+        bytes[1]=(byte) ((this.nibbles[2]*16+this.nibbles[3]) & 0xff);
+        return bytes;
+    }
     public abstract String getString();
     
     public abstract String getDescripcion();

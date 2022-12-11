@@ -274,8 +274,27 @@ public class Ensamblador {
         return null;
     }
     
-    public ArrayList<Instruccion> ensamblar(String nombreFichero){
-        ArrayList<String> lineas = this.readFileAsList(nombreFichero);
+    public byte[] ensamblarInstruccionesComoBytes(ArrayList<Instruccion> instrucciones){
+        byte[] bytes=new byte[instrucciones.size()*2];
+        int pos=0;
+        for (Instruccion i: instrucciones){
+            byte[] bytesInstruccion=i.getBytes();
+            bytes[pos]=(byte) (bytesInstruccion[0]&0xff);
+            bytes[pos+1]=(byte) (bytesInstruccion[1]&0xff);
+            pos=pos+2;
+        }
+        return bytes;
+    }
+    public byte[] ensamblarComoBytes (String nombreFichero){
+        ArrayList<Instruccion> instrucciones = this.ensamblar(nombreFichero);
+        return this.ensamblarInstruccionesComoBytes(instrucciones);
+    }
+    public byte[] ensamblarLineasComoBytes(ArrayList<String> lineas){
+        ArrayList<Instruccion> instrucciones = this.ensamblarLineas(lineas);
+        byte[] bytes = this.ensamblarInstruccionesComoBytes(instrucciones);
+        return bytes;
+    }
+    public ArrayList<Instruccion> ensamblarLineas(ArrayList<String> lineas){
         ArrayList<Instruccion> instrucciones=new ArrayList<>();
         int posEnsamblado=512;
         Instruccion instruccion;
@@ -298,6 +317,11 @@ public class Ensamblador {
                 instrucciones.add(instruccion);
             }
         } //Fin del for
+        return instrucciones;
+    }
+    public ArrayList<Instruccion> ensamblar(String nombreFichero){
+        ArrayList<String> lineas = this.readFileAsList(nombreFichero);
+        ArrayList<Instruccion> instrucciones = this.ensamblarLineas(lineas);
         return instrucciones;
     }
     public static void main(String[] args) {

@@ -1,0 +1,3 @@
+:INICIO
+CLS;
+JP :INICIO;

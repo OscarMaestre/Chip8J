@@ -18,7 +18,7 @@ public class CPUChip8 {
     byte [] registros;
     int[] pila;
     private int registroI;
-    int registroPC;
+    
     int registroSP;
     int delay, sound;
     Random generadorAzar;
@@ -34,6 +34,9 @@ public class CPUChip8 {
         generadorAzar=new Random();
     }
 
+    public void setPC(int nuevoPC){
+        this.registroI=nuevoPC;
+    }
     public boolean aKeyWasPressed() {
         return keyWasPressed;
     }
@@ -75,16 +78,22 @@ public class CPUChip8 {
         this.registroSP--;
         return direccion;
     }
+    public void cargarBytesEnMemoria(byte[] bytes, int posInicio){
+        int pos=posInicio;
+        for (int i=0; i<bytes.length; i++){
+            this.memoria.write(pos, bytes[i]);
+            pos++;
+        }
+ 
+    }
     public void cargarArchivo(String ruta, int posInicio) throws FileNotFoundException, IOException{
         byte[] buffer = new byte[this.TAM_BUFFER_CARGA_FICHEROS];
         FileInputStream flujo=new FileInputStream(ruta);
         int bytesLeidos=flujo.read(buffer);
         byte[] bytesArchivo=Arrays.copyOf(buffer, bytesLeidos);   
-        int pos=posInicio;
-        for (int i=0; i<bytesArchivo.length; i++){
-            this.memoria.write(pos, bytesArchivo[i]);
-            pos++;
-        }
+        
+        this.cargarBytesEnMemoria(bytesArchivo, posInicio);
+        
     }
     
     public void dibujarAlgo(){
@@ -93,7 +102,7 @@ public class CPUChip8 {
     }
     public void cargarArchivo(String ruta) throws FileNotFoundException, IOException{
         cargarArchivo ( ruta, 0x0200 );
-        this.registroPC=0x0200;
+        this.registroI=0x0200;
     }
     
     public byte getNibble (int word, int numNibble){
@@ -151,7 +160,7 @@ public class CPUChip8 {
     
     public void ejecutar(int posInicioPrograma){
         int posInstruccionSiguiente=posInicioPrograma;
-        this.registroPC = posInicioPrograma;
+        this.registroI = posInicioPrograma;
         while (true){
             this.ejecutarInstruccion();
         }
@@ -167,11 +176,12 @@ public class CPUChip8 {
     }
     public void ejecutarInstruccion(){
         
-        int instruccion=memoria.getInstruccion(this.registroPC);
-        String instruccionHEX=String.format("0x%04X", instruccion);
-        System.out.print("En el PC:"+this.registroPC);
-        System.out.println(" estaba la instruccion "+instruccionHEX);
+        int instruccion=memoria.getInstruccion(this.registroI);
         
+        String instruccionHEX=String.format("0x%04X", instruccion);
+        System.out.print("En el PC:"+this.registroI);
+        System.out.println(" estaba la instruccion "+instruccionHEX);
+        this.registroI+=2;
         
         //Instruccion CLR
         if ( instruccion == 0x00e0 ){
@@ -192,7 +202,9 @@ public class CPUChip8 {
         
         if (nibble1 == 2) {
             int NNN = this.getNNN(instruccion);
+            
             this.CALL(NNN);
+            return ;
         } //Instruccion CALL
         
         if ( nibble1 == 3 ){
@@ -316,7 +328,8 @@ public class CPUChip8 {
             } //Fin del if
             
         }
-        this.registroPC+=2;
+        this.actualizarTemporizadores();
+        
     
         
         
@@ -334,16 +347,17 @@ public class CPUChip8 {
     
     public void JMP(int NNN){
         System.out.println("Saltando a "+NNN);
-        this.registroPC = NNN;
+        this.registroI= NNN;
     } //Fin instruccion JMP
 
     public void RTS() {
-        this.registroPC = this.desapilar();
+        this.registroI = this.desapilar();
     } //Fin instruccion RTS
 
     public void CALL(int NNN) {
-        this.apilar(this.registroPC);
-        this.registroPC = NNN;
+        this.apilar(this.registroI);
+        System.out.println("Ejecutando CALL "+NNN);
+        this.registroI = NNN;
     }
 
     public void SE(int instruccion) {
@@ -352,7 +366,7 @@ public class CPUChip8 {
         
         byte valorRegistro = this.registros[numRegistro];
         if (valorRegistro == KK){
-            this.registroPC = (int) (this.registroPC + 2);
+            this.registroI= (int) (this.registroI + 2);
         }
     }
 
@@ -362,7 +376,7 @@ public class CPUChip8 {
         
         byte valorRegistro = this.registros[numRegistro];
         if (valorRegistro != KK){
-            this.registroPC = (int) (this.registroPC + 2);
+            this.registroI  = (int) (this.registroI + 2);
         }
     }
     
@@ -372,7 +386,7 @@ public class CPUChip8 {
         byte valorRegistroX=this.registros[numRegistroX];
         byte valorRegistroY=this.registros[numRegistroY];
         if (valorRegistroX == valorRegistroY){
-            this.registroPC = (int) (this.registroPC + 2);
+            this.registroI = (int) (this.registroI + 2);
         }
     }
 
@@ -494,7 +508,7 @@ public class CPUChip8 {
         byte valorX = this.registros[numRegistroX];
         byte valorY = this.registros[numRegistroY];
         if (valorX != valorY){
-            this.registroPC = (int) (this.registroPC + 2);
+            this.registroI = (int) (this.registroI + 2);
         }
     }
 
@@ -509,7 +523,7 @@ public class CPUChip8 {
         int NNN = this.getNNN(instruccion);
         byte valorV0 = this.registros[0];
         int nuevaDireccion = (int) (NNN + valorV0);
-        this.registroPC = nuevaDireccion;
+        this.registroI = nuevaDireccion;
     }
 
     public void RAND(int instruccion) {
@@ -553,7 +567,7 @@ public class CPUChip8 {
         
         byte valorTecla = (byte) this.keyValue;
         if (valorTecla == valorX){
-            this.registroPC += 2;
+            this.registroI += 2;
         }
     }
     public void SKNP(int instruccion) {
@@ -562,7 +576,7 @@ public class CPUChip8 {
         
         byte valorTecla = (byte) this.keyValue;
         if (valorTecla == valorX){
-            this.registroPC += 2;
+            this.registroI += 2;
         }
     }
 
@@ -648,6 +662,37 @@ public class CPUChip8 {
         System.out.println("Nuevo valor de I:"+registroI);
         this.registroI = registroI;
     }
+
+    private void actualizarTemporizadores() {
+        if (this.delay>0){
+            this.delay--;
+        }
+        if (this.sound>0){
+            this.sound--;
+        }
+    }
+
+    public byte[] getRegistros() {
+        return registros;
+    }
+
+    public int[] getPila() {
+        return pila;
+    }
+
+
+    public int getRegistroSP() {
+        return registroSP;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    public int getSound() {
+        return sound;
+    }
+    
     
 }
 

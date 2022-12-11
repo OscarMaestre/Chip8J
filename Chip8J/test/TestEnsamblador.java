@@ -66,4 +66,12 @@ public class TestEnsamblador {
         System.out.println(ensamblado);
         System.out.println("---Fin de Ensamblado---");
     }
+    @Test 
+    public void ensamblarFicheroBytes(){
+        byte[] ensamblarComoBytes = this.ensamblador.ensamblarComoBytes(this.DIRECTORIO_ENSAMBLADO+"/ensamblado_con_etiqueta02.txt");
+        System.out.println("Byte 1:"+(ensamblarComoBytes[1]&0xff));
+        Assert.assertEquals(ensamblarComoBytes[0], 0);
+        Assert.assertEquals(ensamblarComoBytes[1]&0xff, 0xe0);
+        System.out.println("Byte 1:"+ensamblarComoBytes[1]);
+    }
 }
