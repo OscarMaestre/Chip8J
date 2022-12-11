@@ -7,6 +7,7 @@ package io.github.oscarmaestre.jchip8.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.BitSet;
 import javax.swing.JPanel;
 
 /**
@@ -67,6 +68,14 @@ public class Chip8Display extends JPanel {
         return collision;
     } //End of drawSprite
 
+    public void CLS(){
+        for (int row=0; row < this.STD_HEIGHT; row++){
+            for (int column = 0 ; column < this.STD_WIDTH; column++){
+                this.pixelMatrix[row][column]=false;
+            } //End inner for
+        }//End outer for
+        this.repaint();
+    }
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -107,5 +116,61 @@ public class Chip8Display extends JPanel {
         
     }
 
+    public void dibujarSprite(byte[] sprite, int x0, int y0){
+        /* Al dibujar está permitido que un sprite se salga de la
+        pantalla, se debe hacer que aparezcap or el otro lado
+        */
+        BitSet bits = BitSet.valueOf(sprite);
+        int y=y0;
+        int x=x0;
+        System.out.println(bits.toString());
+        System.out.println("Longitud en bits:"+bits.length());
+        
+        for (int pos = 0 ; pos < bits.length(); pos++){
+            if ( (pos + 1) % 8 ==0){
+                x=x0;
+                y=y+1;
+                System.out.println();
+            }
+            
+            if (bits.get(pos)){
+                this.pixelMatrix[x][y]=true;
+                System.out.print("*");
+            } else {
+                this.pixelMatrix[x][y]=false;
+                System.out.print(" ");
+            }
+            x=x+1;
+            if (x>this.STD_WIDTH){
+                System.out.println("Error, el sprite se sale por un lado y hay que corregirlo");
+            }
+        }
+    }
     
+    public void dibujarSprite(String[] sprite, int x0, int y0){
+        
+        int y=y0;
+        int x=x0;
+        System.out.println(sprite);
+        
+        for (String linea : sprite){
+            x=x0;
+            for (char bit : linea.toCharArray() ){
+                if (bit == '1'){
+                    this.pixelMatrix[x][y]=true;
+                    System.out.print("*");
+                } else {
+                    this.pixelMatrix[x][y]=false;
+                    System.out.print(" ");
+                }
+                x++;
+                if (x>this.STD_WIDTH){
+                    System.out.println("Error, el sprite se sale por un lado y hay que corregirlo");
+                }
+            }
+            System.out.println();
+            y++;
+        }
+    }
+
 } //End of class Chip8Display

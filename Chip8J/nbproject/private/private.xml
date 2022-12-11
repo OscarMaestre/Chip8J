@@ -4,8 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/gui/Chip8Display.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/Memoria.java</file>
             <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/gui/MainFrame.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/ensamblador/Ensamblador.java</file>
             <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/instrucciones/Instruccion.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/CPUChip8.java</file>
+            <file>file:/home/usuario/repos/Chip8J/Chip8J/src/io/github/oscarmaestre/jchip8/Registro.java</file>
         </group>
     </open-files>
 </project-private>
